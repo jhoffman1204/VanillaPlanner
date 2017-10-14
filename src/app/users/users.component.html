@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="col-xs-12">
+
+      <button
+      class="btn btn-primary"
+      (click)="onGetUsers()"> Get Users
+      </button>
+
+      <button
+      class="btn btn-primary"
+      (click)="onSaveUsers()"> Save Users
+      </button>
+
+      <button
+      class="btn btn-primary"
+      (click)="onPrintUser()"> Print Current User
+      </button>
+
+  </div>
+</div>
+<div class="row">
+  <app-user *ngIf="loginStatus === 'logged-in'"></app-user>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <app-user
+          *ngFor="let user of userArray" > 
+        </app-user>
+    </div>
+</div>

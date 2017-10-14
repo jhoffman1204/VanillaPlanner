@@ -1,0 +1,11 @@
+<app-header (pageSelected)="onNavigate($event)"></app-header>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <app-login *ngIf="pageSelected === 'login'"></app-login>
+      <app-users *ngIf="pageSelected === 'users'"></app-users>
+      <app-planner *ngIf="pageSelected === 'planner'"></app-planner>
+
+    </div>
+  </div>
+</div>
