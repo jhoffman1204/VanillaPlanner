@@ -8,12 +8,7 @@
 
       <button
       class="btn btn-primary"
-      (click)="onSaveUsers()"> Save Users
-      </button>
-
-      <button
-      class="btn btn-primary"
-      (click)="onPrintUser()"> Print Current User
+      (click)="onGetSpecificUser()"> Get First User
       </button>
 
   </div>
@@ -25,7 +20,10 @@
 <div class="row">
     <div class="col-xs-12">
         <app-user
-          *ngFor="let user of userArray" > 
+          *ngFor="let user of userArray" 
+          [user]="user"
+          > 
         </app-user>
+        
     </div>
 </div>

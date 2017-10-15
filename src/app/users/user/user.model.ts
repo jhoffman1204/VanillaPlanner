@@ -4,21 +4,21 @@ export class User {
 
   private username: String;
   private password: String;
-  private firstName: String;
+  private email: String;
   private lastName: String;
   private dayplans: DayListItem[];
 
 
-  constructor(username: String, password: String, firstName: String, lastName:  String) {
+  constructor(username: String, password: String, email: String) {
       this.username = username;
       this.password = password;
-      this.firstName = firstName;
-      this.lastName = lastName;
+      this.email = email;
       this.dayplans = [];
    }
 
    addDayPlan(dayplan: DayListItem) {
        this.dayplans.push(dayplan);
+       // this.dayPlanSize = this.dayPlanSize + 1;
    }
 
 

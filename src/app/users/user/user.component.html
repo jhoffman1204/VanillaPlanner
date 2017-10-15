@@ -1,3 +1,28 @@
-<p>
-  This is where a single user info woud go!
-</p>
+<hr>
+<div class="row">
+  <div class="col-xs-6">
+  <div class="row">
+    <div class="col-xs-12">
+      <p> {{user.username}} </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <p> {{user.password}} </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <p> {{user.email}} </p>
+    </div>
+  </div>
+  </div>
+  <div class="col-xs-6">
+    <p>To Do List: </p>
+    <div data-ng-repeat="item in user.dayItemNumber">
+      <!-- {{user.dayplans[0].itembody}} -->
+    </div>
+  </div>
+</div>
+<hr>
+

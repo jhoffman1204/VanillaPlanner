@@ -1,3 +1,4 @@
+import { UserService } from './../../../users/users.service';
 import { DayListItem } from './day-list-item/day-list-item.model';
 import { DayPlanList } from './day-plan-list.model';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -15,7 +16,7 @@ export class DayPlanListComponent implements OnInit {
 
   private addedItemText: String;
   // injecting the service that was added in the providers of day-plan component
-  constructor(private dayPlanService: DayPlanService) {
+  constructor(private dayPlanService: DayPlanService, private userService: UserService) {
    }
 
   ngOnInit() {

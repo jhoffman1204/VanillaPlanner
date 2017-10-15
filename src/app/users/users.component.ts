@@ -8,12 +8,9 @@ import { Response } from '@angular/http';
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
 })
-export class UsersComponent implements OnInit, OnDestroy  {
+export class UsersComponent implements OnInit, OnDestroy {
 
-  private userArray: User[] = [
-        new User('test', 'test', 'test', 'test'),
-        new User('hello', 'world', 'test', 'test')
-    ];
+  private userArray: User[] = [];
 
   constructor(private userService: UserService) {
 
@@ -22,6 +19,11 @@ export class UsersComponent implements OnInit, OnDestroy  {
   private loginStatus = this.userService.getLoginStatus();
 
   ngOnInit() {
+
+    // this.userService.userListUpdated.emit(this.userService.getUserArray());
+
+    this.userArray = this.userService.getUsers();
+
     this.userService.loginStatusUpdated.subscribe(
       (status: string) => {
         this.loginStatus = status;
@@ -32,9 +34,12 @@ export class UsersComponent implements OnInit, OnDestroy  {
     this.userService.userListUpdated.subscribe(
       (array: User[]) => {
         this.userArray = array;
-        console.log(this.userArray);
       }
     );
+  }
+
+  ngOnLoad() {
+    console.log('this ran');
   }
 
   ngOnDestroy() {
@@ -43,20 +48,14 @@ export class UsersComponent implements OnInit, OnDestroy  {
   // }
 }
 
+  // called by the html component when the button is pressed
   onGetUsers() {
-    this.userService.getUser();
+    this.userService.getUserArray();
+    console.log('get users button hit');
   }
 
-  onSaveUsers() {
-    this.userService.storeUsers()
-      .subscribe(
-        (response: Response) => {
-          console.log('successs');
-        }
-      );
+  onGetSpecificUser() {
+    this.userService.updateCurrentUser();
   }
 
-  onPrintUser() {
-    this.userService.printCurrentUser();
-  }
 }

@@ -17,6 +17,7 @@ import { HttpModule } from '@angular/http';
 import { DataComponent } from './data/data.component';
 import { FormsModule} from '@angular/forms';
 import { LoginComponent } from './users/login/login.component';
+import { SignupComponent } from './users/signup/signup.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { LoginComponent } from './users/login/login.component';
     UsersComponent,
     UserComponent,
     DataComponent,
-    LoginComponent
+    LoginComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,

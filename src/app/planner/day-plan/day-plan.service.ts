@@ -12,7 +12,6 @@ export class DayPlanService {
 
     private dayplans: DayListItem[] = [];
 
-    private currentDayPlanList: DayPlanList;
     private currentDayPlan: DayPlan;
 
     constructor(private userService: UserService) {}
@@ -21,20 +20,8 @@ export class DayPlanService {
          this.userService.getCurrentUser();
     }
 
-    setCurrentDayPlan(currentDayPlan: DayPlanList) {
-        this.currentDayPlanList = currentDayPlan;
-    }
-
-    addDayPlanToCurrentUser() {
-        this.userService.addPlanToCurrentUser();
-    }
-
     getDayPlans() {
         return this.dayplans;
-    }
-
-    getCurrentDayPlanlist() {
-        return this.currentDayPlanList;
     }
 
     addToCurrentDayList(listItem: DayListItem) {
@@ -46,7 +33,8 @@ export class DayPlanService {
         this.dayplans.push(
             new DayListItem(plan)
         );
-        this.addDayPlanToCurrentUser();
+        const item: DayListItem = new DayListItem(plan);
+        this.userService.addPlanToCurrentUser(item);
 
     }
 
