@@ -20,7 +20,7 @@ export class DayPlanListComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.dayplans = this.dayPlanService.getDayPlans();
+    this.dayplans = this.userService.getCurrentUser().getUserDayPlans();
   }
 
   onSelected() {
@@ -33,6 +33,7 @@ export class DayPlanListComponent implements OnInit {
 
   onSubmit() {
     this.dayPlanService.addPlan(this.addItemForm.value.itemName);
+    this.userService.addPlanToCurrentUser(this.addItemForm.value.itemName);
     this.addItemForm.reset();
   }
 

@@ -34,7 +34,6 @@ export class DayPlanService {
             new DayListItem(plan)
         );
         const item: DayListItem = new DayListItem(plan);
-        this.userService.addPlanToCurrentUser(item);
 
     }
 

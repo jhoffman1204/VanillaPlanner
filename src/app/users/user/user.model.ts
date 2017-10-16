@@ -18,7 +18,10 @@ export class User {
 
    addDayPlan(dayplan: DayListItem) {
        this.dayplans.push(dayplan);
-       // this.dayPlanSize = this.dayPlanSize + 1;
+   }
+
+   getUserDayPlans() { // will be called by the day-plan-list module
+       return this.dayplans;
    }
 
 

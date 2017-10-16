@@ -2,7 +2,8 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <app-login *ngIf="pageSelected === 'login'"></app-login>
+      <app-login *ngIf="pageSelected === 'login'"
+      (pageSelected)="onNavigate($event)"></app-login>
       <app-users *ngIf="pageSelected === 'users'"></app-users>
       <app-planner *ngIf="pageSelected === 'planner'"></app-planner>
       <app-signup *ngIf="pageSelected === 'signup'"></app-signup>

@@ -1,6 +1,6 @@
 import { UserService } from './../users.service';
 import { NgForm } from '@angular/forms';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-login',
@@ -9,6 +9,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
   @ViewChild('f') addItemForm: NgForm;
+  @Output() pageSelected = new EventEmitter<string>();
 
   constructor(private userService: UserService) { }
 
@@ -18,6 +19,19 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     this.userService.loginStatusUpdated.emit('logged-in');
+    // this.userService.loginAttempt(this.addItemForm.value.username, this.addItemForm.value.password );
+
+    this.promiseExample();
+
+  }
+
+  promiseExample(): Promise<any> {
+    return new Promise((resolve) => {
+      this.userService.loginAttempt(this.addItemForm.value.username, this.addItemForm.value.password );
+      setTimeout(() => { // simulate a server delay
+        this.pageSelected.emit('planner');
+        }, 500);
+    });
   }
 
 }

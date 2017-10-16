@@ -15,12 +15,67 @@ export class UserService implements OnInit {
     private currentUser: User = new User('test', 'test', 'test');
     private loginStatus = 'logged-out';
 
+    private currentUserIndex = -1;
+
     private userArray: User[] = [];
 
     ngOnInit(): void {
         console.log('user service init');
     }
 
+    loginAttempt(username: String, password: String) {
+        // need to check this username against the ones in our database
+        console.log(username);
+        this.http.get('https://vanillaplanner-51d34.firebaseio.com/users.json')
+        .subscribe(
+         (response: Response) => {
+            const tempUserArray = response.json();
+            this.userArray = tempUserArray;
+            let index = -1;
+
+            for (let i = 0; i < tempUserArray.length; i++) {
+                console.log(response.json()[i]);
+                if (response.json()[i] !== null) {  // this doesn't help
+                    const s: String = response.json()[i].username;
+                    const p: String = response.json()[i].password;
+                    if (s === username && p === password) {
+                        index = i;
+                        this.currentUserIndex = i;
+                        console.log('user found');
+                    }
+                }
+            }
+
+            if (index === -1) {
+                return 0;
+            }
+
+            const Jusername: String = response.json()[index].username;
+            const Jpassword: String = response.json()[index].password;
+            const Jemail:    String = response.json()[index].email;
+
+            const user: User = new User(Jusername, Jpassword, Jemail);
+
+            const todos: DayListItem[] = response.json()[index].dayplans;
+
+            if (todos) {
+                for (let i = 0; i < todos.length; i++) {
+                    const dayItem: DayListItem = new DayListItem(todos[i].itembody);
+                    user.addDayPlan(dayItem);
+                }
+            }
+
+               this.userListUpdated.emit(this.userArray);
+               this.currentUser = user;
+               this.userArray[this.currentUserIndex] = user;
+
+               console.log(user);
+
+          }
+        );
+        return 1;
+        // console.log(this.currentUser);
+    }
     getLoginStatus() {
         return this.loginStatus;
     }
@@ -38,7 +93,6 @@ export class UserService implements OnInit {
     }
 
     storeUsers() {
-        console.log(this.userArray);
         return this.http.put('https://vanillaplanner-51d34.firebaseio.com/users.json',
         this.userArray)
         .subscribe(
@@ -55,7 +109,6 @@ export class UserService implements OnInit {
         .subscribe(
          (response: Response) => {
             this.userArray = response.json();
-            console.log(response.json());
             const username: String = response.json()[0].username;
             const password: String = response.json()[0].password;
             const email:    String = response.json()[0].email;
@@ -64,7 +117,8 @@ export class UserService implements OnInit {
 
             const todos: DayListItem[] = response.json()[0].dayplans;
             for (let i = 0; i < todos.length; i++) {
-                console.log(todos[i]);
+                const dayItem: DayListItem = new DayListItem(todos[i].itembody);
+                user.addDayPlan(dayItem);
             }
 
             this.userListUpdated.emit(this.userArray);
@@ -78,13 +132,12 @@ export class UserService implements OnInit {
         this.currentUser = user;
     }
 
-    addPlanToCurrentUser(item: DayListItem) {
+    addPlanToCurrentUser(item: String) {
          if (this.currentUser == null) {
             this.currentUser = new User('1', '2', '3');
-            console.log('current user is null');
          }
-        console.log(this.currentUser);
-        this.currentUser.addDayPlan(item);
+        const plan: DayListItem = new DayListItem(item);
+        this.currentUser.addDayPlan(plan);
         this.storeUsers();
     }
     updateCurrentUser() {
