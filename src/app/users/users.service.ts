@@ -1,12 +1,13 @@
 import { User } from './user/user.model';
 import { DayListItem } from './../planner/day-plan/day-plan-list/day-list-item/day-list-item.model';
 import { Injectable, EventEmitter, OnInit } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
+import 'rxjs/Rx';
 
 @Injectable()
 export class UserService implements OnInit {
 
-    constructor(private http: Http) {}
+    constructor(private http: HttpClient) {}
 
     loginStatusUpdated = new EventEmitter<string>();
     userListUpdated = new EventEmitter<User[]>();
@@ -20,28 +21,41 @@ export class UserService implements OnInit {
     private userArray: User[] = [];
 
     ngOnInit(): void {
-        console.log('user service init');
+
     }
 
     loginAttempt(username: String, password: String) {
-        // need to check this username against the ones in our database
-        console.log(username);
-        this.http.get('https://vanillaplanner-51d34.firebaseio.com/users.json')
+        this.http.get<User[]>('https://vanillaplanner-51d34.firebaseio.com/users.json')
+        .map(
+            (tempUserArray) => {
+                const users: User[] = tempUserArray;
+                // tslint:disable-next-line:prefer-const
+                for (let user of users){
+                    if (!user['dayplans']) {
+                        user['dayplans'] = [];
+                    }
+                    if (!user['email']) {
+                        user['email'] = 'default';
+                    }
+                    if (!user['maxID']) {
+                        user['maxID'] = 0;
+                    }
+                }
+            return users;
+          }
+        )
         .subscribe(
-         (response: Response) => {
-            const tempUserArray = response.json();
+         (tempUserArray) => {
             this.userArray = tempUserArray;
             let index = -1;
 
             for (let i = 0; i < tempUserArray.length; i++) {
-                console.log(response.json()[i]);
-                if (response.json()[i] !== null) {  // this doesn't help
-                    const s: String = response.json()[i].username;
-                    const p: String = response.json()[i].password;
+                if (tempUserArray[i] !== null) {  // this doesn't help
+                    const s: String = tempUserArray[i].username;
+                    const p: String = tempUserArray[i].password;
                     if (s === username && p === password) {
                         index = i;
                         this.currentUserIndex = i;
-                        console.log('user found');
                     }
                 }
             }
@@ -50,31 +64,55 @@ export class UserService implements OnInit {
                 return 0;
             }
 
-            const Jusername: String = response.json()[index].username;
-            const Jpassword: String = response.json()[index].password;
-            const Jemail:    String = response.json()[index].email;
+            const Jusername: String = tempUserArray[index].username;
+            const Jpassword: String = tempUserArray[index].password;
+            const Jemail:    String = tempUserArray[index].email;
 
             const user: User = new User(Jusername, Jpassword, Jemail);
 
-            const todos: DayListItem[] = response.json()[index].dayplans;
+            const todos: DayListItem[] = tempUserArray[index].dayplans;
 
             if (todos) {
                 for (let i = 0; i < todos.length; i++) {
-                    const dayItem: DayListItem = new DayListItem(todos[i].itembody);
-                    user.addDayPlan(dayItem);
+                    user.addDayPlan(todos[i].itembody, todos[i].id );
                 }
             }
 
                this.userListUpdated.emit(this.userArray);
+               this.loginStatusUpdated.emit('logged-in');
                this.currentUser = user;
                this.userArray[this.currentUserIndex] = user;
-
-               console.log(user);
 
           }
         );
         return 1;
-        // console.log(this.currentUser);
+    }
+    loadUsers() {
+        this.http.get<User[]>('https://vanillaplanner-51d34.firebaseio.com/users.json')
+        .map(
+            (tempUserArray) => {
+                const users: User[] = tempUserArray;
+                // tslint:disable-next-line:prefer-const
+                for (let user of users){
+                    if (!user['dayplans']) {
+                        user['dayplans'] = [];
+                    }
+                    if (!user['email']) {
+                        user['email'] = 'default';
+                    }
+                    if (!user['maxID']) {
+                        user['maxID'] = 0;
+                    }
+                }
+            return users;
+          }
+        )
+        .subscribe(
+         (tempUserArray) => {
+            this.userArray = tempUserArray;
+          }
+        );
+        return 1;
     }
     getLoginStatus() {
         return this.loginStatus;
@@ -86,10 +124,14 @@ export class UserService implements OnInit {
     }
     setLoginStatus(status: string) {
         this.loginStatus = status;
-        console.log(status);
     }
     getCurrentUser() {
         return this.currentUser;
+    }
+
+    deletePlan(planID: number) {
+        this.currentUser.deletePlan(planID);
+
     }
 
     storeUsers() {
@@ -97,35 +139,12 @@ export class UserService implements OnInit {
         this.userArray)
         .subscribe(
         (response: Response) => {
-          console.log('successs');
+
         }
       );
     }
     getUsers() {
         return this.userArray;
-    }
-    getUserArray() {
-        this.http.get('https://vanillaplanner-51d34.firebaseio.com/users.json')
-        .subscribe(
-         (response: Response) => {
-            this.userArray = response.json();
-            const username: String = response.json()[0].username;
-            const password: String = response.json()[0].password;
-            const email:    String = response.json()[0].email;
-
-            const user: User = new User(username, password, email);
-
-            const todos: DayListItem[] = response.json()[0].dayplans;
-            for (let i = 0; i < todos.length; i++) {
-                const dayItem: DayListItem = new DayListItem(todos[i].itembody);
-                user.addDayPlan(dayItem);
-            }
-
-            this.userListUpdated.emit(this.userArray);
-            this.currentUser = user;
-          }
-        );
-        console.log(this.currentUser);
     }
 
     setCurrentUser(user: User) {
@@ -136,16 +155,8 @@ export class UserService implements OnInit {
          if (this.currentUser == null) {
             this.currentUser = new User('1', '2', '3');
          }
-        const plan: DayListItem = new DayListItem(item);
-        this.currentUser.addDayPlan(plan);
+        this.currentUser.addNewDayPlan(item);
         this.storeUsers();
-    }
-    updateCurrentUser() {
-        console.log('updating...');
-    }
-
-    printCurrentUser() {
-        console.log(this.currentUser);
     }
 
 }

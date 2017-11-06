@@ -1,4 +1,3 @@
-import { DayPlanService } from './day-plan.service';
 import { DayPlan } from './day-plan.model';
 import { DayPlanList } from './day-plan-list/day-plan-list.model';
 import { Component, OnInit } from '@angular/core';

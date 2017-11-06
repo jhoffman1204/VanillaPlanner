@@ -1,4 +1,3 @@
-import { DayPlanService } from './planner/day-plan/day-plan.service';
 import { UserService } from './users/users.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -18,6 +17,7 @@ import { DataComponent } from './data/data.component';
 import { FormsModule} from '@angular/forms';
 import { LoginComponent } from './users/login/login.component';
 import { SignupComponent } from './users/signup/signup.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -38,9 +38,9 @@ import { SignupComponent } from './users/signup/signup.component';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpClientModule
   ],
-  providers: [UserService, DayPlanService],
+  providers: [UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

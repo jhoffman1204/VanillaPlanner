@@ -1,3 +1,4 @@
+import { UserService } from './../../../../users/users.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { DayListItem } from './day-list-item.model';
 
@@ -10,7 +11,7 @@ export class DayListItemComponent implements OnInit {
 
   @Input() dayplan: DayListItem;
 
-  constructor() { }
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
   }
@@ -18,6 +19,10 @@ export class DayListItemComponent implements OnInit {
   onSelected() {
     console.log(this.dayplan.itembody);
     this.dayplan.setCompleted();
+  }
+
+  onDelete() {
+    this.userService.deletePlan(this.dayplan.getID());
   }
 
 }

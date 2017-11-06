@@ -1,10 +1,10 @@
-import { VanillaPlannerPage } from './app.po';
+import { Vanillaplannerv2Page } from './app.po';
 
-describe('vanilla-planner App', () => {
-  let page: VanillaPlannerPage;
+describe('vanillaplannerv2 App', () => {
+  let page: Vanillaplannerv2Page;
 
   beforeEach(() => {
-    page = new VanillaPlannerPage();
+    page = new Vanillaplannerv2Page();
   });
 
   it('should display welcome message', () => {

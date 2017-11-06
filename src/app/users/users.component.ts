@@ -2,6 +2,7 @@ import { User } from './user/user.model';
 import { UserService } from './users.service';
 import { Component, OnInit, EventEmitter, OnDestroy } from '@angular/core';
 import { Response } from '@angular/http';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-users',
@@ -11,6 +12,8 @@ import { Response } from '@angular/http';
 export class UsersComponent implements OnInit, OnDestroy {
 
   private userArray: User[] = [];
+
+  private dateObj: Date = new Date();
 
   constructor(private userService: UserService) {
 
@@ -38,6 +41,10 @@ export class UsersComponent implements OnInit, OnDestroy {
     );
   }
 
+  getLoginStatus() {
+    return this.loginStatus;
+  }
+
   ngOnLoad() {
     console.log('this ran');
   }
@@ -48,14 +55,8 @@ export class UsersComponent implements OnInit, OnDestroy {
   // }
 }
 
-  // called by the html component when the button is pressed
-  onGetUsers() {
-    this.userService.getUserArray();
-    console.log('get users button hit');
-  }
-
   onGetSpecificUser() {
-    this.userService.updateCurrentUser();
+
   }
 
 }

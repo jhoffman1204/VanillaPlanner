@@ -1,3 +1,4 @@
+import { UserService } from './../users/users.service';
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 
 @Component({
@@ -8,14 +9,27 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 export class HeaderComponent implements OnInit {
   @Output() pageSelected = new EventEmitter<string>();
   private currentPage: String;
+  private loginStatus = 'logged-out';
 
-  constructor() { }
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
+    this.userService.loginStatusUpdated.subscribe(
+      (status: string) => {
+        this.loginStatus = status;
+        console.log(this.loginStatus);
+      }
+    );
+  }
 
+  getLoginStatus() {
+    return this.loginStatus;
   }
 
   onSelect(pageName: string) {
+    if (pageName === 'logout') {
+      this.loginStatus = 'logged-out';
+    }
     this.pageSelected.emit(pageName);
   }
 

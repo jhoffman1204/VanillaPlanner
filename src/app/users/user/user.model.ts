@@ -2,12 +2,11 @@ import { DayListItem } from './../../planner/day-plan/day-plan-list/day-list-ite
 import { DayPlan } from './../../planner/day-plan/day-plan.model';
 export class User {
 
-  private username: String;
-  private password: String;
-  private email: String;
-  private lastName: String;
-  private dayplans: DayListItem[];
-
+  username: String;
+  password: String;
+  email: String;
+  dayplans: DayListItem[];
+  maxItemID = 1;
 
   constructor(username: String, password: String, email: String) {
       this.username = username;
@@ -16,14 +15,36 @@ export class User {
       this.dayplans = [];
    }
 
-   addDayPlan(dayplan: DayListItem) {
-       this.dayplans.push(dayplan);
+   addDayPlan(dayplan: String, id: number) {
+       const plan: DayListItem = new DayListItem(dayplan , id);
+       this.maxItemID = this.maxItemID + 1;
+       this.dayplans.push(plan);
+   }
+    addNewDayPlan(dayplan: String) {
+       const plan: DayListItem = new DayListItem(dayplan , this.maxItemID + 1);
+       this.maxItemID = this.maxItemID + 1;
+       this.dayplans.push(plan);
    }
 
    getUserDayPlans() { // will be called by the day-plan-list module
        return this.dayplans;
    }
 
+   deletePlan(planID: number) {
+        for (let i = 0; i < this.dayplans.length; i++) {
+            if (this.dayplans[i] != null && this.dayplans[i].id === planID) {
+                this.dayplans.splice(i, 1);
+            }
+        }
+   }
+
+   getUsername() {
+       return this.username;
+   }
+
+   getPassword() {
+       return this.password;
+   }
 
 
 }

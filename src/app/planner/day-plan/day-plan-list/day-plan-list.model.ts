@@ -1,16 +1,15 @@
-import { DayPlanService } from './../day-plan.service';
 import { DayListItem } from './day-list-item/day-list-item.model';
 
 export class DayPlanList {
 
   private todo: DayListItem[];
 
-  constructor(private dayPlanService: DayPlanService) {
+  constructor() {
 
    }
 
    addItem(newItem: DayListItem) {
-       this.dayPlanService.addToCurrentDayList(newItem);
+
    }
 
    addDayPlanItems(items: DayListItem[]) {

@@ -2,11 +2,12 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <app-login *ngIf="pageSelected === 'login'"
+      <app-login *ngIf="getPageSelected() === 'login'"
       (pageSelected)="onNavigate($event)"></app-login>
-      <app-users *ngIf="pageSelected === 'users'"></app-users>
-      <app-planner *ngIf="pageSelected === 'planner'"></app-planner>
-      <app-signup *ngIf="pageSelected === 'signup'"></app-signup>
+      <app-signup *ngIf="getPageSelected() === 'signup'"
+      (pageSelected)="onNavigate($event)"></app-signup>
+      <app-users *ngIf="getPageSelected() === 'users'"></app-users>
+      <app-planner *ngIf="getPageSelected() === 'planner'"></app-planner>
     </div>
   </div>
 </div>

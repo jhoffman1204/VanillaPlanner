@@ -13,5 +13,9 @@ export class AppComponent {
     this.pageSelected = page;
   }
 
+  getPageSelected() {
+      return this.pageSelected;
+  }
+
 
 }
